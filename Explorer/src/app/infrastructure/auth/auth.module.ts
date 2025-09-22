@@ -4,7 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
-
+import { MatCheckboxModule } from '@angular/material/checkbox'; 
 
 
 @NgModule({
@@ -15,7 +15,8 @@ import { RegistrationComponent } from './registration/registration.component';
   imports: [
     CommonModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCheckboxModule
   ],
   exports: [
     LoginComponent
