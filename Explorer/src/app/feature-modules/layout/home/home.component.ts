@@ -36,6 +36,10 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  navigateToBrowseTours(): void {
+    this.router.navigate(['/browse-tours']);
+  }
+
   navigateToRegister(): void {
     this.router.navigate(['/register']);
   }

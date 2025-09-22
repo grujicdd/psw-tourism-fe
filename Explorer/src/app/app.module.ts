@@ -1,3 +1,4 @@
+// app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -11,6 +12,7 @@ import { BlogModule } from './feature-modules/blog/blog.module';
 import { MarketplaceModule } from './feature-modules/marketplace/marketplace.module';
 import { TourAuthoringModule } from './feature-modules/tour-authoring/tour-authoring.module';
 import { TourExecutionModule } from './feature-modules/tour-execution/tour-execution.module';
+import { TourBrowsingModule } from './feature-modules/tour-browsing/tour-browsing.module';
 import { AuthModule } from './infrastructure/auth/auth.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
@@ -31,6 +33,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MarketplaceModule,
     TourAuthoringModule,
     TourExecutionModule,
+    TourBrowsingModule,
     AuthModule,
     HttpClientModule,
     MatCheckboxModule
