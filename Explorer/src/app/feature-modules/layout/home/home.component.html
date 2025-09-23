@@ -1,1 +1,105 @@
-<p><b>Home component</b></p>
+<!-- home.component.html -->
+<div class="home-container">
+  <!-- Welcome Section -->
+  <div class="hero-section">
+    <h1>Welcome to Explorer</h1>
+    <p class="hero-subtitle">Your gateway to amazing tours and adventures</p>
+  </div>
+
+  <!-- Not Logged In -->
+  <div class="auth-section" *ngIf="!user || user.username === ''">
+    <h2>Get Started</h2>
+    <div class="auth-cards">
+      <mat-card class="action-card" (click)="navigateToLogin()">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>login</mat-icon>
+          <mat-card-title>Login</mat-card-title>
+          <mat-card-subtitle>Sign in to your account</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Access your existing account and manage your tours.</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card" (click)="navigateToRegister()">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>person_add</mat-icon>
+          <mat-card-title>Register</mat-card-title>
+          <mat-card-subtitle>Create a new account</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Join Explorer and start discovering amazing tours.</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Logged In - Author/Guide -->
+  <div class="dashboard-section" *ngIf="user && user.username !== '' && (user.role === 'author' || user.role === 'Author' || user.role.toLowerCase() === 'author')">>
+    <h2>Tour Guide Dashboard</h2>
+    <div class="dashboard-cards">
+      <mat-card class="action-card" (click)="navigateToTours()">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="tour-icon">tour</mat-icon>
+          <mat-card-title>Manage Tours</mat-card-title>
+          <mat-card-subtitle>Create and edit your tours</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Create new tours, edit existing ones, and manage your tour portfolio.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary">
+            <mat-icon>arrow_forward</mat-icon>
+            Go to Tours
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Logged In - Administrator -->
+  <div class="dashboard-section" *ngIf="user && user.username !== '' && user.role === 'administrator'">
+    <h2>Administrator Dashboard</h2>
+    <div class="dashboard-cards">
+      <mat-card class="action-card" (click)="navigateToEquipment()">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="admin-icon">build</mat-icon>
+          <mat-card-title>Manage Equipment</mat-card-title>
+          <mat-card-subtitle>System equipment management</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Add, edit, and manage equipment used in tours.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary">
+            <mat-icon>arrow_forward</mat-icon>
+            Go to Equipment
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Logged In - Tourist -->
+  <div class="dashboard-section" *ngIf="user && user.username !== '' && (user.role === 'tourist' || user.role === 'Tourist' || user.role.toLowerCase() === 'tourist')">>
+    <h2>Tourist Dashboard</h2>
+    <div class="dashboard-cards">
+      <mat-card class="action-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="tourist-icon">explore</mat-icon>
+          <mat-card-title>Browse Tours</mat-card-title>
+          <mat-card-subtitle>Discover amazing experiences</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Browse available tours and find your next adventure.</p>
+          <p><em>Coming soon...</em></p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Welcome back message -->
+  <div class="welcome-back" *ngIf="user && user.username !== ''">
+    <p>Welcome back, <strong>{{ user.username }}</strong>!</p>
+  </div>
+</div>

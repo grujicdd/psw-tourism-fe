@@ -1,11 +1,45 @@
+<!-- navbar.component.html -->
 <mat-toolbar color="primary">
     <div>
         <p>Explorer</p>
         <div id="buttons">
-            <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['login']">Login</button>
-            <button *ngIf="user && user.username !== ''" color="accent" mat-raised-button (click)="onLogout()">Logout</button>
-            <button color="primary" mat-raised-button [routerLink]="['home']">Home</button>
-            <button *ngIf="user && user.role === 'administrator'"color="primary" mat-raised-button [routerLink]="['equipment']">Manage equipment</button>
+            <!-- Authentication buttons -->
+            <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['login']">
+                <mat-icon>login</mat-icon>
+                Login
+            </button>
+            <button *ngIf="user && user.username === ''" color="accent" mat-raised-button [routerLink]="['register']">
+                <mat-icon>person_add</mat-icon>
+                Register
+            </button>
+            <button *ngIf="user && user.username !== ''" color="accent" mat-raised-button (click)="onLogout()">
+                <mat-icon>logout</mat-icon>
+                Logout
+            </button>
+            
+            <!-- Navigation buttons -->
+            <button color="primary" mat-raised-button [routerLink]="['home']">
+                <mat-icon>home</mat-icon>
+                Home
+            </button>
+            
+            <!-- Admin-only buttons -->
+            <button *ngIf="user && user.role === 'administrator'" color="primary" mat-raised-button [routerLink]="['equipment']">
+                <mat-icon>build</mat-icon>
+                Manage Equipment
+            </button>
+            
+            <!-- Author/Guide buttons -->
+            <button *ngIf="user && (user.role === 'author' || user.role === 'Author' || user.role.toLowerCase() === 'author')" color="primary" mat-raised-button [routerLink]="['tours']">
+                <mat-icon>tour</mat-icon>
+                Manage Tours
+            </button>
+            
+            <!-- Tourist buttons -->
+            <button *ngIf="user && (user.role === 'tourist' || user.role === 'Tourist' || user.role.toLowerCase() === 'tourist')" color="primary" mat-raised-button [routerLink]="['browse-tours']">
+                <mat-icon>explore</mat-icon>
+                Browse Tours
+            </button>
         </div>
     </div>
 </mat-toolbar>

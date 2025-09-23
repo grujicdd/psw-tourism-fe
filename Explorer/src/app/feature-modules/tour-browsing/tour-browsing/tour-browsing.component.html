@@ -1,0 +1,138 @@
+<!-- tour-browsing.component.html -->
+<div class="tour-browsing-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Explore Tours</h1>
+    <p class="subtitle">Discover amazing adventures and experiences</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-container">
+    <mat-card class="filters-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>tune</mat-icon>
+          Filters
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="filterForm" class="filters-form">
+          <div class="filter-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Category</mat-label>
+              <mat-select formControlName="category" (selectionChange)="onFilterChange()">
+                <mat-option [value]="null">All Categories</mat-option>
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{ category.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Difficulty</mat-label>
+              <mat-select formControlName="difficulty" (selectionChange)="onFilterChange()">
+                <mat-option [value]="null">All Difficulties</mat-option>
+                <mat-option *ngFor="let difficulty of difficulties" [value]="difficulty.id">
+                  {{ difficulty.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Max Price (€)</mat-label>
+              <input matInput type="number" formControlName="maxPrice" min="0" step="0.01"
+                     (input)="onMaxPriceChange()" placeholder="Enter max price">
+            </mat-form-field>
+
+            <button mat-stroked-button (click)="clearFilters()" class="clear-filters-btn">
+              <mat-icon>clear</mat-icon>
+              Clear Filters
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Results Summary -->
+  <div class="results-summary" *ngIf="!loading || tours.length > 0">
+    <p>
+      <strong>{{ totalCount }}</strong> tours found
+      <span *ngIf="tours.length > 0 && tours.length < totalCount">
+        (showing {{ tours.length }})
+      </span>
+    </p>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading && tours.length === 0">
+    <mat-spinner></mat-spinner>
+    <p>Loading tours...</p>
+  </div>
+
+  <!-- No Results -->
+  <div class="no-results" *ngIf="!loading && tours.length === 0">
+    <mat-icon>explore_off</mat-icon>
+    <h3>No tours found</h3>
+    <p>Try adjusting your filters or check back later for new tours.</p>
+  </div>
+
+  <!-- Tours Grid -->
+  <div class="tours-grid" *ngIf="tours.length > 0">
+    <mat-card class="tour-card" *ngFor="let tour of tours" (click)="onTourSelect(tour)">
+      <mat-card-header>
+        <div class="tour-header">
+          <div class="tour-title-section">
+            <mat-card-title class="tour-title">{{ tour.name }}</mat-card-title>
+            <div class="tour-badges">
+              <span class="category-badge">{{ getCategoryName(tour.category) }}</span>
+              <span class="difficulty-badge" [style.background-color]="getDifficultyColor(tour.difficulty)">
+                {{ getDifficultyName(tour.difficulty) }}
+              </span>
+            </div>
+          </div>
+          <div class="tour-price">
+            <span class="price-label">From</span>
+            <span class="price-amount">{{ formatPrice(tour.price) }}</span>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="tour-description">{{ tour.description }}</p>
+        
+        <div class="tour-details">
+          <div class="detail-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ tour.date | date:'mediumDate' }}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>location_on</mat-icon>
+            <span>View on Map</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="onTourSelect(tour); $event.stopPropagation()">
+          <mat-icon>info</mat-icon>
+          View Details
+        </button>
+        <button mat-raised-button color="accent" (click)="$event.stopPropagation()">
+          <mat-icon>shopping_cart</mat-icon>
+          Add to Cart
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Load More Button -->
+  <div class="load-more-container" *ngIf="hasNextPage && tours.length > 0">
+    <button mat-stroked-button (click)="loadMoreTours()" [disabled]="loading" class="load-more-btn">
+      <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+      <mat-icon *ngIf="!loading">expand_more</mat-icon>
+      {{ loading ? 'Loading...' : 'Load More Tours' }}
+    </button>
+  </div>
+</div>

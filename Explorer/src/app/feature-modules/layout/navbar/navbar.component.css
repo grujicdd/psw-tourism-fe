@@ -1,10 +1,72 @@
+/* navbar.component.css */
 div {
     width: 100%;
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 #buttons {
     width: auto;
     margin-left: auto;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Style for navigation buttons with icons */
+#buttons button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#buttons button mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+#buttons button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Brand/logo styling */
+p {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+    div {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    #buttons {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    #buttons button {
+        min-width: auto;
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+    
+    #buttons button mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
 }
