@@ -15,6 +15,8 @@ export class TourManagementComponent implements OnInit {
   tours: Tour[] = [];
   showCreateForm = false;
   editingTour: Tour | null = null;
+  selectedTour: Tour | null = null;
+  showKeyPointManagement = false;
 
   // Category options (matching the interests from registration)
   categories = [
@@ -186,6 +188,17 @@ export class TourManagementComponent implements OnInit {
         }
       });
     }
+  }
+
+  manageKeyPoints(tour: Tour): void {
+    this.selectedTour = tour;
+    this.showKeyPointManagement = true;
+    this.showCreateForm = false;
+  }
+
+  backToTourList(): void {
+    this.showKeyPointManagement = false;
+    this.selectedTour = null;
   }
 
   getCategoryName(categoryId: number): string {
