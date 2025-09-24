@@ -1,0 +1,182 @@
+<!-- keypoint-management.component.html -->
+<div class="keypoint-management-container">
+  <!-- Instructions -->
+  <div class="instructions" *ngIf="!readOnly">
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>info</mat-icon>
+        <mat-card-title>How to Add Key Points</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Click anywhere on the map to add a new key point. You need at least 2 key points to publish your tour.</p>
+        <p><strong>Current key points: {{ keyPoints.length }}</strong> 
+           <span *ngIf="keyPoints.length < 2" class="warning-text">
+             ({{ 2 - keyPoints.length }} more needed to publish)
+           </span>
+           <span *ngIf="canPublishTour" class="success-text">
+             ✓ Ready to publish!
+           </span>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Map -->
+  <div class="map-container">
+    <app-map 
+      [keyPoints]="keyPoints"
+      [height]="500"
+      [editable]="!readOnly"
+      (locationSelected)="onLocationSelected($event)"
+      (keyPointSelected)="onKeyPointSelected($event)">
+    </app-map>
+  </div>
+
+  <!-- Key Point Form -->
+  <div class="form-container" *ngIf="showCreateForm && !readOnly">
+    <mat-card class="keypoint-form-card">
+      <mat-card-header>
+        <mat-card-title>
+          {{ editingKeyPoint ? 'Edit Key Point' : 'Add New Key Point' }}
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="keyPointForm" (ngSubmit)="editingKeyPoint ? updateKeyPoint() : createKeyPoint()">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Key Point Name</mat-label>
+              <input matInput formControlName="name" placeholder="e.g., City Museum">
+              <mat-error *ngIf="name?.hasError('required') && name?.touched">
+                Key point name is required
+              </mat-error>
+              <mat-error *ngIf="name?.hasError('minlength') && name?.touched">
+                Name must be at least 3 characters long
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="3" 
+                        placeholder="Describe what visitors will see here..."></textarea>
+              <mat-error *ngIf="description?.hasError('required') && description?.touched">
+                Description is required
+              </mat-error>
+              <mat-error *ngIf="description?.hasError('minlength') && description?.touched">
+                Description must be at least 10 characters long
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Latitude</mat-label>
+              <input matInput type="number" formControlName="latitude" 
+                     step="0.000001" readonly>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Longitude</mat-label>
+              <input matInput type="number" formControlName="longitude" 
+                     step="0.000001" readonly>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Image URL (Optional)</mat-label>
+              <input matInput formControlName="imageUrl" type="url" 
+                     placeholder="https://example.com/image.jpg">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Order</mat-label>
+              <input matInput type="number" formControlName="order" min="1">
+              <mat-hint>Order in which visitors will visit this point</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="hideForm()">
+              Cancel
+            </button>
+            <button mat-raised-button color="warn" type="button" 
+                    *ngIf="editingKeyPoint && selectedKeyPoint"
+                    (click)="deleteKeyPoint(selectedKeyPoint.id)">
+              <mat-icon>delete</mat-icon>
+              Delete
+            </button>
+            <button mat-raised-button color="primary" type="submit" 
+                    [disabled]="keyPointForm.invalid">
+              <mat-icon>{{ editingKeyPoint ? 'save' : 'add_location' }}</mat-icon>
+              {{ editingKeyPoint ? 'Update' : 'Add' }} Key Point
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Key Points List -->
+  <div class="keypoints-list" *ngIf="keyPoints.length > 0">
+    <h3>Tour Key Points ({{ keyPoints.length }})</h3>
+    
+    <div class="keypoints-grid">
+      <mat-card class="keypoint-card" *ngFor="let keyPoint of keyPoints">
+        <mat-card-header>
+          <div class="order-badge" mat-card-avatar>{{ keyPoint.order }}</div>
+          <mat-card-title>{{ keyPoint.name }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ keyPoint.latitude | number:'1.4-4' }}, {{ keyPoint.longitude | number:'1.4-4' }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="keypoint-description">{{ keyPoint.description }}</p>
+          <div class="keypoint-image" *ngIf="keyPoint.imageUrl">
+            <img [src]="keyPoint.imageUrl" [alt]="keyPoint.name" 
+                 
+                 >
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions *ngIf="!readOnly">
+          <button mat-button color="primary" (click)="onKeyPointSelected(keyPoint)">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+          <button mat-button color="warn" (click)="deleteKeyPoint(keyPoint.id)">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Publishing Status -->
+  <div class="publishing-status" *ngIf="!readOnly">
+    <mat-card [class.success-card]="canPublishTour" [class.warning-card]="!canPublishTour">
+      <mat-card-content>
+        <div class="status-content">
+          <mat-icon class="status-icon">
+            {{ canPublishTour ? 'check_circle' : 'warning' }}
+          </mat-icon>
+          <div class="status-text">
+            <h4 *ngIf="canPublishTour">Ready to Publish!</h4>
+            <h4 *ngIf="!canPublishTour">More Key Points Needed</h4>
+            <p *ngIf="canPublishTour">
+              Your tour has {{ keyPoints.length }} key points and is ready to be published.
+            </p>
+            <p *ngIf="!canPublishTour">
+              You need at least 2 key points to publish your tour. 
+              Currently you have {{ keyPoints.length }} key point(s).
+            </p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

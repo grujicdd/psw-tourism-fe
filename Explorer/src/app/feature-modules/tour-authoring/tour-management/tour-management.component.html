@@ -1,5 +1,7 @@
 <!-- tour-management.component.html -->
-<div class="tour-management-container">
+
+<!-- Main Tour Management View -->
+<div class="tour-management-container" *ngIf="!showKeyPointManagement">
   <div class="header">
     <h1>Tour Management</h1>
     <button mat-raised-button color="primary" (click)="showCreateTourForm()" *ngIf="!showCreateForm">
@@ -154,6 +156,11 @@
             <mat-icon>edit</mat-icon>
             Edit
           </button>
+
+          <button mat-button color="accent" (click)="manageKeyPoints(tour)">
+            <mat-icon>place</mat-icon>
+            Key Points
+          </button>
           
           <button mat-button color="accent" (click)="publishTour(tour)" 
                   *ngIf="tour.state === 0"
@@ -170,4 +177,22 @@
       </mat-card>
     </div>
   </div>
+</div>
+
+<!-- Key Point Management View -->
+<div class="keypoint-view-container" *ngIf="showKeyPointManagement && selectedTour">
+  <div class="keypoint-header">
+    <button mat-icon-button (click)="backToTourList()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-info">
+      <h1>Key Points for: {{ selectedTour.name }}</h1>
+      <p class="tour-subtitle">{{ selectedTour.description }}</p>
+    </div>
+  </div>
+
+  <app-keypoint-management 
+    [tourId]="selectedTour.id" 
+    [readOnly]="selectedTour.state === 1">
+  </app-keypoint-management>
 </div>
