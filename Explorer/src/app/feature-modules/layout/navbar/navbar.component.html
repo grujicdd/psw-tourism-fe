@@ -40,6 +40,18 @@
                 <mat-icon>explore</mat-icon>
                 Browse Tours
             </button>
+
+            <button *ngIf="user && (user.role === 'tourist' || user.role === 'Tourist')" 
+                    color="primary" mat-raised-button [routerLink]="['cart']">
+                <mat-icon>shopping_cart</mat-icon>
+                My Cart
+            </button>
+
+            <button *ngIf="user && (user.role === 'tourist' || user.role === 'Tourist')" 
+                    color="primary" mat-raised-button [routerLink]="['purchase-history']">
+                <mat-icon>history</mat-icon>
+                Purchase History
+            </button>
         </div>
     </div>
 </mat-toolbar>

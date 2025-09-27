@@ -1,0 +1,173 @@
+<!-- src/app/feature-modules/tour-details/tour-details/tour-details.component.html -->
+<div class="tour-details-container">
+  
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+    <p>Loading tour details...</p>
+  </div>
+
+  <!-- Tour Details Content -->
+  <div class="tour-content" *ngIf="!loading && tour">
+    
+    <!-- Header with Back Button -->
+    <div class="header-section">
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-content">
+        <h1 class="tour-title">{{ tour.name }}</h1>
+        <div class="tour-badges">
+          <span class="category-badge">{{ getCategoryName(tour.category) }}</span>
+          <span class="difficulty-badge" [style.background-color]="getDifficultyInfo(tour.difficulty).color">
+            {{ getDifficultyInfo(tour.difficulty).name }}
+          </span>
+        </div>
+      </div>
+      <div class="tour-price-section">
+        <span class="price-label">Price</span>
+        <span class="price-amount">{{ formatPrice(tour.price) }}</span>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="main-content">
+      
+      <!-- Left Column - Tour Information -->
+      <div class="tour-info-section">
+        
+        <!-- Tour Description -->
+        <mat-card class="info-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>description</mat-icon>
+              Tour Description
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="tour-description">{{ tour.description }}</p>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Tour Details -->
+        <mat-card class="info-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>info</mat-icon>
+              Tour Information
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <mat-icon>schedule</mat-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Date & Time</span>
+                  <span class="detail-value">{{ tour.date | date:'full' }}</span>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <mat-icon>category</mat-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Category</span>
+                  <span class="detail-value">{{ getCategoryName(tour.category) }}</span>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <mat-icon>fitness_center</mat-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Difficulty</span>
+                  <span class="detail-value" [style.color]="getDifficultyInfo(tour.difficulty).color">
+                    {{ getDifficultyInfo(tour.difficulty).name }}
+                  </span>
+                </div>
+              </div>
+              
+              <div class="detail-item">
+                <mat-icon>euro</mat-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Price</span>
+                  <span class="detail-value price">{{ formatPrice(tour.price) }}</span>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Key Points List -->
+        <mat-card class="info-card" *ngIf="keyPoints.length > 0">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>place</mat-icon>
+              Tour Stops ({{ keyPoints.length }})
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="key-points-list">
+              <div class="key-point-item" *ngFor="let keyPoint of keyPoints">
+                <div class="key-point-order">{{ keyPoint.order }}</div>
+                <div class="key-point-info">
+                  <h4 class="key-point-name">{{ keyPoint.name }}</h4>
+                  <p class="key-point-description">{{ keyPoint.description }}</p>
+                  <div class="key-point-coordinates">
+                    <mat-icon>location_on</mat-icon>
+                    <span>{{ keyPoint.latitude | number:'1.4-4' }}, {{ keyPoint.longitude | number:'1.4-4' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Action Buttons -->
+        <div class="action-section">
+          <button mat-stroked-button color="primary" (click)="goBack()" class="secondary-action">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Tours
+          </button>
+          
+          <button mat-raised-button 
+                  color="accent" 
+                  (click)="addTourToCart()"
+                  [disabled]="addingToCart"
+                  class="primary-action">
+            <mat-spinner diameter="20" *ngIf="addingToCart"></mat-spinner>
+            <mat-icon *ngIf="!addingToCart">shopping_cart</mat-icon>
+            {{ addingToCart ? 'Adding to Cart...' : 'Add to Cart' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column - Map -->
+      <div class="map-section">
+        <mat-card class="map-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>map</mat-icon>
+              Tour Route & Key Points
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="map-content">
+            <div id="map" class="tour-map"></div>
+            <div class="map-legend" *ngIf="keyPoints.length > 0">
+              <div class="legend-item">
+                <div class="legend-marker marker-pin"></div>
+                <span>Key Points</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-line"></div>
+                <span>Tour Route</span>
+              </div>
+            </div>
+            <div class="no-map-data" *ngIf="keyPoints.length === 0">
+              <mat-icon>map</mat-icon>
+              <p>No route information available for this tour</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

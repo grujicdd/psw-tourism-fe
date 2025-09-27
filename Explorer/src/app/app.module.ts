@@ -17,6 +17,8 @@ import { AuthModule } from './infrastructure/auth/auth.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TourPurchasingModule } from './feature-modules/tour-purchasing/tour-purchasing.module';
+import { TourDetailsModule } from './feature-modules/tour-details/tour-details.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     TourBrowsingModule,
     AuthModule,
     HttpClientModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    TourPurchasingModule,
+    TourDetailsModule
   ],
   providers: [
     {

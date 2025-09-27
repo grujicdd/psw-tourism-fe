@@ -1,0 +1,144 @@
+<!-- src/app/feature-modules/tour-purchasing/shopping-cart/shopping-cart.component.html -->
+<div class="cart-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <mat-icon>shopping_cart</mat-icon>
+      Shopping Cart
+    </h1>
+    <p class="subtitle" *ngIf="cartData">
+      {{ cartData.tours.length }} tour{{ cartData.tours.length !== 1 ? 's' : '' }} in your cart
+    </p>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+    <p>Loading your cart...</p>
+  </div>
+
+  <!-- Empty Cart -->
+  <div class="empty-cart" *ngIf="!loading && cartData && cartData.tours.length === 0">
+    <mat-icon>shopping_cart</mat-icon>
+    <h3>Your cart is empty</h3>
+    <p>Browse our tours and add some to get started!</p>
+    <button mat-raised-button color="primary" (click)="continueShopping()">
+      <mat-icon>explore</mat-icon>
+      Browse Tours
+    </button>
+  </div>
+
+  <!-- Cart Content -->
+  <div class="cart-content" *ngIf="!loading && cartData && cartData.tours.length > 0">
+    
+    <!-- Tour Items -->
+    <div class="cart-items">
+      <mat-card class="cart-item" *ngFor="let tour of cartData.tours">
+        <mat-card-content>
+          <div class="item-header">
+            <div class="item-info">
+              <h3 class="item-title">{{ tour.name }}</h3>
+              <div class="item-badges">
+                <span class="category-badge">{{ getCategoryName(tour.category) }}</span>
+                <span class="difficulty-badge">{{ getDifficultyName(tour.difficulty) }}</span>
+              </div>
+            </div>
+            <div class="item-price">
+              <span class="price">{{ formatPrice(tour.price) }}</span>
+            </div>
+          </div>
+          
+          <p class="item-description">{{ tour.description }}</p>
+          
+          <div class="item-details">
+            <div class="detail-item">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ tour.date | date:'mediumDate' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+        
+        <mat-card-actions>
+          <button mat-button color="warn" (click)="removeTourFromCart(tour.id)">
+            <mat-icon>remove_shopping_cart</mat-icon>
+            Remove
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <!-- Cart Summary -->
+    <mat-card class="cart-summary">
+      <mat-card-header>
+        <mat-card-title>Order Summary</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="summary-row">
+          <span>Subtotal ({{ cartData.tours.length }} tours):</span>
+          <span class="amount">{{ formatPrice(cartData.totalPrice) }}</span>
+        </div>
+
+        <!-- Bonus Points Section -->
+        <div class="bonus-points-section" *ngIf="bonusPoints && bonusPoints.availablePoints > 0">
+          <mat-divider></mat-divider>
+          
+          <div class="bonus-info">
+            <h4>
+              <mat-icon>stars</mat-icon>
+              Bonus Points Available
+            </h4>
+            <p>You have {{ formatPrice(bonusPoints.availablePoints) }} in bonus points</p>
+          </div>
+
+          <mat-form-field appearance="outline" class="bonus-input">
+            <mat-label>Use Bonus Points</mat-label>
+            <input matInput type="number" 
+                   [(ngModel)]="bonusPointsToUse"
+                   (ngModelChange)="onBonusPointsChange()"
+                   [max]="maxUsableBonusPoints"
+                   min="0"
+                   step="0.01"
+                   placeholder="0.00">
+            <span matTextPrefix>€</span>
+            <mat-hint>Max: {{ formatPrice(maxUsableBonusPoints) }}</mat-hint>
+          </mat-form-field>
+
+          <div class="summary-row bonus-row" *ngIf="bonusPointsToUse > 0">
+            <span>Bonus Points Used:</span>
+            <span class="discount">-{{ formatPrice(bonusPointsToUse) }}</span>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+        
+        <div class="summary-row total-row">
+          <span class="total-label">Total:</span>
+          <span class="total-amount">{{ formatPrice(finalAmount) }}</span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="summary-actions">
+        <button mat-button (click)="clearCart()" [disabled]="purchasing">
+          <mat-icon>clear</mat-icon>
+          Clear Cart
+        </button>
+        
+        <button mat-button (click)="continueShopping()" [disabled]="purchasing">
+          <mat-icon>arrow_back</mat-icon>
+          Continue Shopping
+        </button>
+        
+        <button mat-raised-button 
+                color="primary" 
+                (click)="processPurchase()" 
+                [disabled]="purchasing"
+                class="purchase-btn">
+          <mat-spinner diameter="20" *ngIf="purchasing"></mat-spinner>
+          <mat-icon *ngIf="!purchasing">payment</mat-icon>
+          {{ purchasing ? 'Processing...' : 'Purchase Tours' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

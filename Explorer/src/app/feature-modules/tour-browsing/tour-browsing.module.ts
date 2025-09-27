@@ -12,8 +12,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TourBrowsingComponent } from './tour-browsing/tour-browsing.component';
+import { ShoppingCartComponent } from '../tour-purchasing/shopping-cart/shopping-cart.component';
+import { PurchaseHistoryComponent } from '../tour-purchasing/purchase-history/purchase-history.component';
+import { TourPurchasingModule } from '../tour-purchasing/tour-purchasing.module';
+
 
 @NgModule({
   declarations: [
@@ -30,7 +34,9 @@ import { TourBrowsingComponent } from './tour-browsing/tour-browsing.component';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule,
+    TourPurchasingModule
   ],
   exports: [
     TourBrowsingComponent
