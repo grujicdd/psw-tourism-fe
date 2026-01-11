@@ -1,4 +1,4 @@
-// tourist-tour.service.ts
+// src/app/feature-modules/tour-browsing/tourist-tour.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -15,6 +15,17 @@ export interface TourFilter {
   category?: number;
   difficulty?: number;
   maxPrice?: number;
+}
+
+export interface KeyPoint {
+  id: number;
+  tourId: number;
+  name: string;
+  description: string;
+  latitude: number;
+  longitude: number;
+  imageUrl?: string;
+  order: number;
 }
 
 @Injectable({
@@ -53,5 +64,10 @@ export class TouristTourService {
 
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.apiUrl}/categories`);
+  }
+
+  // Add this new method for keypoints
+  getTourKeyPoints(tourId: number): Observable<KeyPoint[]> {
+    return this.http.get<KeyPoint[]>(`${this.apiUrl}/${tourId}/keypoints`);
   }
 }

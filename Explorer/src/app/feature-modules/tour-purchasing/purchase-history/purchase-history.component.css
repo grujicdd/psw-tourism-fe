@@ -1,0 +1,308 @@
+/* src/app/feature-modules/tour-purchasing/purchase-history/purchase-history.component.css */
+
+.history-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px;
+}
+
+.header h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 10px 0;
+  font-size: 2.2em;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1.1em;
+}
+
+/* Tabs */
+.tab-content {
+  padding: 20px 0;
+}
+
+/* Loading & Empty States */
+.loading-container,
+.no-purchases,
+.no-transactions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.loading-container mat-spinner {
+  margin-bottom: 20px;
+}
+
+.no-purchases mat-icon,
+.no-transactions mat-icon {
+  font-size: 80px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.no-purchases h3,
+.no-transactions h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.no-purchases button {
+  margin-top: 20px;
+  padding: 12px 24px;
+}
+
+/* Purchase Cards */
+.purchases-list,
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.purchase-card,
+.transaction-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.purchase-card:hover,
+.transaction-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Purchase Header */
+.purchase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.purchase-info {
+  flex: 1;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Purchased Tours */
+.purchased-tours {
+  margin-bottom: 20px;
+}
+
+.purchased-tours h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 1.1em;
+}
+
+.tour-list {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.tour-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tour-item:last-child {
+  border-bottom: none;
+}
+
+.tour-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tour-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.tour-category {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.tour-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.tour-date {
+  font-size: 14px;
+  color: #666;
+}
+
+.tour-price {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* Purchase Summary */
+.purchase-summary {
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+.summary-row.total {
+  font-weight: 700;
+  font-size: 16px;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.discount {
+  color: #ff9800;
+}
+
+/* Transaction Cards */
+.transaction-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.transaction-icon {
+  flex-shrink: 0;
+}
+
+.transaction-icon mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.transaction-details {
+  flex: 1;
+}
+
+.transaction-description {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.transaction-date {
+  font-size: 14px;
+  color: #666;
+}
+
+.transaction-amount {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.amount {
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+.amount.positive {
+  color: #4caf50;
+}
+
+.amount.negative {
+  color: #f44336;
+}
+
+/* Load More */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.load-more-container button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .history-container {
+    padding: 15px;
+  }
+
+  .header {
+    padding: 30px 15px;
+  }
+
+  .header h1 {
+    font-size: 1.8em;
+  }
+
+  .purchase-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .tour-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .tour-details {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .transaction-content {
+    gap: 12px;
+  }
+
+  .transaction-amount {
+    text-align: left;
+  }
+}

@@ -6,6 +6,14 @@
     <p class="subtitle">Discover amazing adventures and experiences</p>
   </div>
 
+  <button mat-fab 
+          color="accent" 
+          class="floating-cart-btn"
+          (click)="viewCart()"
+          matTooltip="View Cart">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
+
   <!-- Filters -->
   <div class="filters-container">
     <mat-card class="filters-card">
@@ -119,11 +127,16 @@
           <mat-icon>info</mat-icon>
           View Details
         </button>
-        <button mat-raised-button color="accent" (click)="$event.stopPropagation()">
-          <mat-icon>shopping_cart</mat-icon>
-          Add to Cart
+        <button mat-raised-button 
+                color="accent" 
+                (click)="addTourToCart(tour, $event)"
+                [disabled]="isAddingToCart(tour.id)">
+          <mat-spinner diameter="16" *ngIf="isAddingToCart(tour.id)"></mat-spinner>
+          <mat-icon *ngIf="!isAddingToCart(tour.id)">shopping_cart</mat-icon>
+          {{ isAddingToCart(tour.id) ? 'Adding...' : 'Add to Cart' }}
         </button>
       </mat-card-actions>
+
     </mat-card>
   </div>
 

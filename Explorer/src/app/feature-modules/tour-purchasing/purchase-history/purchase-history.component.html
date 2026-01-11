@@ -1,0 +1,151 @@
+<!-- src/app/feature-modules/tour-purchasing/purchase-history/purchase-history.component.html -->
+<div class="history-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <mat-icon>history</mat-icon>
+      My Purchase History
+    </h1>
+    <p class="subtitle">View your past purchases and bonus point transactions</p>
+  </div>
+
+  <!-- Tabs -->
+  <mat-tab-group [(selectedIndex)]="selectedTab" (selectedTabChange)="onTabChange($event.index)">
+    
+    <!-- Purchase History Tab -->
+    <mat-tab label="Purchase History">
+      <div class="tab-content">
+        
+        <!-- Loading State -->
+        <div class="loading-container" *ngIf="loading && purchases.length === 0">
+          <mat-spinner></mat-spinner>
+          <p>Loading your purchases...</p>
+        </div>
+
+        <!-- No Purchases -->
+        <div class="no-purchases" *ngIf="!loading && purchases.length === 0">
+          <mat-icon>receipt_long</mat-icon>
+          <h3>No purchases yet</h3>
+          <p>You haven't made any tour purchases yet. Start exploring!</p>
+          <button mat-raised-button color="primary" routerLink="/browse-tours">
+            <mat-icon>explore</mat-icon>
+            Browse Tours
+          </button>
+        </div>
+
+        <!-- Purchase List -->
+        <div class="purchases-list" *ngIf="purchases.length > 0">
+          <mat-card class="purchase-card" *ngFor="let purchaseData of purchases">
+            <mat-card-header>
+              <div class="purchase-header">
+                <div class="purchase-info">
+                  <mat-card-title>Purchase #{{ purchaseData.purchase.id }}</mat-card-title>
+                  <mat-card-subtitle>
+                    {{ purchaseData.purchase.purchaseDate | date:'medium' }}
+                  </mat-card-subtitle>
+                </div>
+                <div class="purchase-status">
+                  <span class="status-badge" 
+                        [style.background-color]="getStatusColor(purchaseData.purchase.status)">
+                    {{ getStatusName(purchaseData.purchase.status) }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-header>
+
+            <mat-card-content>
+              <!-- Tours in Purchase -->
+              <div class="purchased-tours">
+                <h4>Tours Purchased ({{ purchaseData.tours.length }})</h4>
+                <div class="tour-list">
+                  <div class="tour-item" *ngFor="let tour of purchaseData.tours">
+                    <div class="tour-info">
+                      <span class="tour-name">{{ tour.name }}</span>
+                      <span class="tour-category">{{ getCategoryName(tour.category) }}</span>
+                    </div>
+                    <div class="tour-details">
+                      <span class="tour-date">{{ tour.date | date:'mediumDate' }}</span>
+                      <span class="tour-price">{{ formatPrice(tour.price) }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Purchase Summary -->
+              <div class="purchase-summary">
+                <div class="summary-row">
+                  <span>Subtotal:</span>
+                  <span>{{ formatPrice(purchaseData.purchase.totalAmount) }}</span>
+                </div>
+                <div class="summary-row" *ngIf="purchaseData.purchase.bonusPointsUsed > 0">
+                  <span>Bonus Points Used:</span>
+                  <span class="discount">-{{ formatPrice(purchaseData.purchase.bonusPointsUsed) }}</span>
+                </div>
+                <div class="summary-row total">
+                  <span>Total Paid:</span>
+                  <span>{{ formatPrice(purchaseData.purchase.finalAmount) }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Load More -->
+        <div class="load-more-container" *ngIf="hasNextPage">
+          <button mat-stroked-button (click)="loadMorePurchases()" [disabled]="loading">
+            <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+            <mat-icon *ngIf="!loading">expand_more</mat-icon>
+            {{ loading ? 'Loading...' : 'Load More' }}
+          </button>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Bonus Points History Tab -->
+    <mat-tab label="Bonus Points History">
+      <div class="tab-content">
+        
+        <!-- Loading State -->
+        <div class="loading-container" *ngIf="loading && bonusTransactions.length === 0">
+          <mat-spinner></mat-spinner>
+          <p>Loading bonus point history...</p>
+        </div>
+
+        <!-- No Transactions -->
+        <div class="no-transactions" *ngIf="!loading && bonusTransactions.length === 0">
+          <mat-icon>stars</mat-icon>
+          <h3>No bonus point activity</h3>
+          <p>You haven't earned or used any bonus points yet.</p>
+        </div>
+
+        <!-- Transaction List -->
+        <div class="transactions-list" *ngIf="bonusTransactions.length > 0">
+          <mat-card class="transaction-card" *ngFor="let transaction of bonusTransactions">
+            <mat-card-content>
+              <div class="transaction-content">
+                <div class="transaction-icon">
+                  <mat-icon [style.color]="getTransactionTypeColor(transaction.type)">
+                    {{ getTransactionTypeIcon(transaction.type) }}
+                  </mat-icon>
+                </div>
+                
+                <div class="transaction-details">
+                  <div class="transaction-description">{{ transaction.description }}</div>
+                  <div class="transaction-date">{{ transaction.createdAt | date:'medium' }}</div>
+                </div>
+                
+                <div class="transaction-amount">
+                  <span class="amount" 
+                        [class.positive]="transaction.amount > 0"
+                        [class.negative]="transaction.amount < 0">
+                    {{ transaction.amount > 0 ? '+' : '' }}{{ formatPrice(getAbsoluteValue(transaction.amount)) }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
