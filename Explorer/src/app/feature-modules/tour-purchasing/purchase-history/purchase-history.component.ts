@@ -4,11 +4,20 @@ import { PurchaseService, TourPurchase, PurchaseStatus } from '../purchase.servi
 import { TouristTourService } from '../../tour-browsing/tourist-tour.service';
 import { Tour } from '../../tour-authoring/model/tour.model';
 import { BonusPointsService, BonusTransaction } from '../bonus-points.service';
+import { TourReviewService, TourReview } from '../tour-review.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TourReviewDialogComponent } from '../tour-review-dialog/tour-review-dialog.component';
 import { forkJoin, map, switchMap } from 'rxjs';
+
+interface TourWithReview {
+  tour: Tour;
+  review?: TourReview;
+  canReview: boolean;
+}
 
 interface PurchaseWithTours {
   purchase: TourPurchase;
-  tours: Tour[];
+  tours: TourWithReview[];
 }
 
 @Component({
@@ -25,11 +34,14 @@ export class PurchaseHistoryComponent implements OnInit {
   totalCount = 0;
   hasNextPage = false;
   selectedTab = 0; // 0 = purchases, 1 = bonus history
+  currentDate = new Date();
 
   constructor(
     private purchaseService: PurchaseService,
     private tourService: TouristTourService,
-    private bonusPointsService: BonusPointsService
+    private bonusPointsService: BonusPointsService,
+    private reviewService: TourReviewService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -41,12 +53,34 @@ export class PurchaseHistoryComponent implements OnInit {
     
     this.purchaseService.getPurchaseHistory(this.currentPage, this.pageSize).subscribe({
       next: (result) => {
-        // Load tour details for each purchase
-        const purchaseRequests = result.results.map(purchase => 
-          forkJoin(purchase.tourIds.map(id => this.tourService.getTour(id))).pipe(
-            map(tours => ({ purchase, tours }))
-          )
-        );
+        // Load tour details, reviews, and eligibility for each purchase
+        const purchaseRequests = result.results.map(purchase => {
+          // Get all tours for this purchase
+          const tourRequests = purchase.tourIds.map(tourId =>
+            forkJoin({
+              tour: this.tourService.getTour(tourId),
+              canReview: this.reviewService.canReviewTour(purchase.id, tourId)
+            })
+          );
+
+          return forkJoin(tourRequests).pipe(
+            switchMap(toursData => {
+              // Get existing reviews for this purchase
+              return this.reviewService.getReviewsForPurchase(purchase.id).pipe(
+                map(reviews => {
+                  // Combine tour data with review data
+                  const tours: TourWithReview[] = toursData.map(data => ({
+                    tour: data.tour,
+                    canReview: data.canReview,
+                    review: reviews.find(r => r.tourId === data.tour.id)
+                  }));
+
+                  return { purchase, tours };
+                })
+              );
+            })
+          );
+        });
 
         if (purchaseRequests.length === 0) {
           this.purchases = [];
@@ -78,6 +112,49 @@ export class PurchaseHistoryComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  openReviewDialog(tourWithReview: TourWithReview, purchaseId: number): void {
+    const dialogRef = this.dialog.open(TourReviewDialogComponent, {
+      width: '600px',
+      data: {
+        tour: tourWithReview.tour,
+        purchaseId: purchaseId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Review was submitted successfully, reload purchases to show the new review
+        this.currentPage = 0;
+        this.loadPurchases();
+      }
+    });
+  }
+
+  getReviewButtonText(tourWithReview: TourWithReview): string {
+    if (tourWithReview.review) {
+      return 'View Review';
+    }
+    if (tourWithReview.canReview) {
+      return 'Write Review';
+    }
+    return 'Review Unavailable';
+  }
+
+  getReviewButtonIcon(tourWithReview: TourWithReview): string {
+    if (tourWithReview.review) {
+      return 'visibility';
+    }
+    if (tourWithReview.canReview) {
+      return 'rate_review';
+    }
+    return 'block';
+  }
+
+  showReviewDetails(review: TourReview): void {
+    // You can implement a dialog to show review details, or just display inline
+    console.log('Review details:', review);
   }
 
   loadBonusHistory(): void {
@@ -167,5 +244,9 @@ export class PurchaseHistoryComponent implements OnInit {
 
   getAbsoluteValue(value: number): number {
     return Math.abs(value);
+  }
+
+  getStars(rating: number): string {
+    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
   }
 }

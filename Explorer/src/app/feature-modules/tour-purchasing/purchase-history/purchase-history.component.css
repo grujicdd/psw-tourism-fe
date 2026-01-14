@@ -306,3 +306,113 @@
     text-align: left;
   }
 }
+
+.tour-item-with-review {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tour-item-with-review:last-child {
+  border-bottom: none;
+}
+
+.tour-main-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Review Section */
+.tour-review-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 12px;
+  border-left: 3px solid #f0f0f0;
+  margin-top: 8px;
+}
+
+.existing-review {
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.stars {
+  font-size: 18px;
+  color: #ffd700;
+  letter-spacing: 2px;
+}
+
+.rating-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+}
+
+.review-comment {
+  font-size: 14px;
+  font-style: italic;
+  color: #444;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.review-date {
+  font-size: 12px;
+  color: #888;
+}
+
+.review-button {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.review-status-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.review-status-message .info-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: #999;
+}
+
+.status-text {
+  font-size: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tour-main-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tour-details {
+    align-items: flex-start;
+    text-align: left;
+    margin-top: 8px;
+  }
+
+  .tour-review-section {
+    padding-left: 8px;
+  }
+}

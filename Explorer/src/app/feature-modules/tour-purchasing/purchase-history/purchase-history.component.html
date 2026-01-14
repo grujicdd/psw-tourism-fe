@@ -56,20 +56,62 @@
             <mat-card-content>
               <!-- Tours in Purchase -->
               <div class="purchased-tours">
-                <h4>Tours Purchased ({{ purchaseData.tours.length }})</h4>
-                <div class="tour-list">
-                  <div class="tour-item" *ngFor="let tour of purchaseData.tours">
+              <h4>Tours Purchased ({{ purchaseData.tours.length }})</h4>
+              <div class="tour-list">
+                <div class="tour-item-with-review" *ngFor="let tourData of purchaseData.tours">
+                  
+                  <!-- Tour Information -->
+                  <div class="tour-main-info">
                     <div class="tour-info">
-                      <span class="tour-name">{{ tour.name }}</span>
-                      <span class="tour-category">{{ getCategoryName(tour.category) }}</span>
+                      <span class="tour-name">{{ tourData.tour.name }}</span>
+                      <span class="tour-category">{{ getCategoryName(tourData.tour.category) }}</span>
                     </div>
                     <div class="tour-details">
-                      <span class="tour-date">{{ tour.date | date:'mediumDate' }}</span>
-                      <span class="tour-price">{{ formatPrice(tour.price) }}</span>
+                      <span class="tour-date">{{ tourData.tour.date | date:'mediumDate' }}</span>
+                      <span class="tour-price">{{ formatPrice(tourData.tour.price) }}</span>
                     </div>
                   </div>
+
+                  <!-- Review Section -->
+                  <div class="tour-review-section">
+                    
+                    <!-- Existing Review Display -->
+                    <div class="existing-review" *ngIf="tourData.review">
+                      <div class="review-rating">
+                        <span class="stars">{{ getStars(tourData.review.rating) }}</span>
+                        <span class="rating-text">{{ tourData.review.rating }}/5</span>
+                      </div>
+                      <p class="review-comment" *ngIf="tourData.review.comment">
+                        "{{ tourData.review.comment }}"
+                      </p>
+                      <span class="review-date">
+                        Reviewed on {{ tourData.review.reviewDate | date:'mediumDate' }}
+                      </span>
+                    </div>
+
+                    <!-- Review Button -->
+                    <button 
+                      mat-stroked-button 
+                      [color]="tourData.canReview ? 'primary' : 'basic'"
+                      [disabled]="!tourData.canReview && !tourData.review"
+                      (click)="tourData.review ? showReviewDetails(tourData.review) : openReviewDialog(tourData, purchaseData.purchase.id)"
+                      class="review-button">
+                      <mat-icon>{{ getReviewButtonIcon(tourData) }}</mat-icon>
+                      {{ getReviewButtonText(tourData) }}
+                    </button>
+
+                    <!-- Status Message -->
+                    <div class="review-status-message" *ngIf="!tourData.canReview && !tourData.review">
+                      <mat-icon class="info-icon">info</mat-icon>
+                      <span class="status-text">
+                        {{ tourData.tour.date > currentDate ? 'Available after tour completion' : 'Review period expired (7 days)' }}
+                      </span>
+                    </div>
+                  </div>
+
                 </div>
               </div>
+            </div>
 
               <!-- Purchase Summary -->
               <div class="purchase-summary">
