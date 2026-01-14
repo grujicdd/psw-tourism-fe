@@ -1,0 +1,81 @@
+/* src/app/feature-modules/tour-purchasing/tour-review-dialog/tour-review-dialog.component.css */
+
+.rating-section {
+  margin-bottom: 20px;
+}
+
+.rating-section label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.star-rating {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.star {
+  font-size: 40px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.star-empty {
+  color: #e0e0e0;
+}
+
+.star-filled {
+  color: #ffd700;
+}
+
+.star:hover {
+  transform: scale(1.1);
+}
+
+.rating-text {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 5px;
+}
+
+.full-width {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.required-indicator {
+  color: #f44336;
+  font-size: 12px;
+}
+
+.helper-text {
+  font-size: 14px;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  text-align: center;
+}
+
+mat-dialog-content {
+  min-width: 400px;
+  max-width: 600px;
+}
+
+mat-dialog-actions button {
+  margin-left: 8px;
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+mat-error {
+  font-size: 12px;
+  margin-top: 5px;
+}

@@ -1,0 +1,70 @@
+<!-- src/app/feature-modules/tour-purchasing/tour-review-dialog/tour-review-dialog.component.html -->
+<h2 mat-dialog-title>Review Tour: {{ data.tour.name }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="reviewForm">
+    
+    <!-- Star Rating -->
+    <div class="rating-section">
+      <label>Rating *</label>
+      <div class="star-rating">
+        <span 
+          *ngFor="let star of [1,2,3,4,5]"
+          class="star"
+          [ngClass]="getStarClass(star)"
+          (click)="setRating(star)"
+          (mouseenter)="setHoveredRating(star)"
+          (mouseleave)="clearHoveredRating()">
+          ★
+        </span>
+      </div>
+      <div class="rating-text" *ngIf="selectedRating > 0">
+        {{ selectedRating }} out of 5 stars
+      </div>
+      <mat-error *ngIf="reviewForm.get('rating')?.invalid && reviewForm.get('rating')?.touched">
+        Please select a rating
+      </mat-error>
+    </div>
+
+    <!-- Comment -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>
+        Comment 
+        <span *ngIf="isCommentRequired()" class="required-indicator">(Required for ratings 1-2)</span>
+      </mat-label>
+      <textarea 
+        matInput 
+        formControlName="comment"
+        rows="5"
+        placeholder="Share your experience with this tour...">
+      </textarea>
+      <mat-error *ngIf="reviewForm.get('comment')?.hasError('required')">
+        Comment is required for ratings 1 and 2
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Helper text -->
+    <div class="helper-text" *ngIf="selectedRating > 0">
+      <span *ngIf="selectedRating === 5">⭐ Excellent!</span>
+      <span *ngIf="selectedRating === 4">👍 Great!</span>
+      <span *ngIf="selectedRating === 3">😊 Good</span>
+      <span *ngIf="selectedRating === 2">😕 Could be better</span>
+      <span *ngIf="selectedRating === 1">😞 Not satisfied</span>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="submitting">
+    Cancel
+  </button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="submitReview()"
+    [disabled]="submitting || !reviewForm.valid">
+    <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+    <span *ngIf="!submitting">Submit Review</span>
+  </button>
+</mat-dialog-actions>

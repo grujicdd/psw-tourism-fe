@@ -7,11 +7,13 @@ import { MaterialModule } from '../../infrastructure/material/material.module';
 // Components
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { PurchaseHistoryComponent } from './purchase-history/purchase-history.component';
+import { TourReviewDialogComponent } from './tour-review-dialog/tour-review-dialog.component';
 
 @NgModule({
   declarations: [
     ShoppingCartComponent,
-    PurchaseHistoryComponent
+    PurchaseHistoryComponent,
+    TourReviewDialogComponent
   ],
   imports: [
     CommonModule,
