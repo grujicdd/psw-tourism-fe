@@ -30,6 +30,15 @@
             </button>
             
             <!-- Author/Guide buttons -->
+
+            <button *ngIf="user && (user.role === 'tourist' || user.role === 'Tourist' || user.role.toLowerCase() === 'tourist')" 
+                    color="primary" 
+                    mat-raised-button 
+                    [routerLink]="['tourist-profile']">
+                <mat-icon>person</mat-icon>
+                My Profile
+            </button>
+
             <button *ngIf="user && (user.role === 'author' || user.role === 'Author' || user.role.toLowerCase() === 'author')" color="primary" mat-raised-button [routerLink]="['tours']">
                 <mat-icon>tour</mat-icon>
                 Manage Tours

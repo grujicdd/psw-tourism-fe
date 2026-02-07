@@ -19,6 +19,8 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TourPurchasingModule } from './feature-modules/tour-purchasing/tour-purchasing.module';
 import { TourDetailsModule } from './feature-modules/tour-details/tour-details.module';
+import { StakeholdersModule } from './feature-modules/stakeholders/stakeholders.module';
+
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { TourDetailsModule } from './feature-modules/tour-details/tour-details.m
     HttpClientModule,
     MatCheckboxModule,
     TourPurchasingModule,
-    TourDetailsModule
+    TourDetailsModule,
+    StakeholdersModule,
   ],
   providers: [
     {
