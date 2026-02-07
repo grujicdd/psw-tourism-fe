@@ -1,0 +1,158 @@
+<!-- File: Explorer/src/app/feature-modules/stakeholders/tourist-profile/tourist-profile.component.html -->
+<div class="profile-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <mat-icon>person</mat-icon>
+      My Profile
+    </h1>
+    <p class="subtitle">Manage your interests and notification preferences</p>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+    <p>Loading your profile...</p>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="profile-content" *ngIf="!loading && profile">
+    
+    <!-- Personal Information Card -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>badge</mat-icon>
+          Personal Information
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon>person_outline</mat-icon>
+            <div class="info-details">
+              <span class="info-label">Name</span>
+              <span class="info-value">{{ profile.name }} {{ profile.surname }}</span>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <mat-icon>email</mat-icon>
+            <div class="info-details">
+              <span class="info-label">Email</span>
+              <span class="info-value">{{ profile.email }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Interests and Preferences Card -->
+    <mat-card class="preferences-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>favorite</mat-icon>
+          Interests & Preferences
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+          
+          <!-- Interests Section -->
+          <div class="form-section">
+            <h3 class="section-title">Tour Interests</h3>
+            <p class="section-description">
+              Select the types of tours you're interested in. You'll receive recommendations based on your selections.
+            </p>
+
+            <div class="interests-grid">
+              <div class="interest-item" 
+                   *ngFor="let interest of interests"
+                   [class.selected]="isInterestSelected(interest.id)">
+                <mat-checkbox
+                  [checked]="isInterestSelected(interest.id)"
+                  (change)="toggleInterest(interest.id)"
+                  color="primary">
+                  <div class="interest-content">
+                    <mat-icon class="interest-icon">{{ getInterestIcon(interest.id) }}</mat-icon>
+                    <span class="interest-name">{{ interest.name }}</span>
+                  </div>
+                </mat-checkbox>
+              </div>
+            </div>
+
+            <div class="validation-message" *ngIf="profileForm.get('interestIds')?.value.length === 0">
+              <mat-icon>warning</mat-icon>
+              Please select at least one interest
+            </div>
+          </div>
+
+          <mat-divider class="section-divider"></mat-divider>
+
+          <!-- Notifications Section -->
+          <div class="form-section">
+            <h3 class="section-title">Email Notifications</h3>
+            <p class="section-description">
+              Control how you receive tour recommendations
+            </p>
+
+            <div class="notification-toggle">
+              <mat-slide-toggle
+                formControlName="receiveRecommendations"
+                color="primary">
+                <div class="toggle-content">
+                  <div class="toggle-header">
+                    <mat-icon>notifications</mat-icon>
+                    <span class="toggle-label">Receive tour recommendations</span>
+                  </div>
+                  <span class="toggle-description">
+                    Get notified when new tours matching your interests are published
+                  </span>
+                </div>
+              </mat-slide-toggle>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="actions">
+            <button mat-button
+                    type="button"
+                    (click)="onCancel()"
+                    [disabled]="saving">
+              <mat-icon>cancel</mat-icon>
+              Cancel
+            </button>
+            
+            <button mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="saving">
+              <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
+              <mat-icon *ngIf="!saving">save</mat-icon>
+              {{ saving ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="!loading && !profile">
+    <mat-card class="error-card">
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon>error_outline</mat-icon>
+          <h3>Failed to Load Profile</h3>
+          <p>We couldn't load your profile. Please try refreshing the page.</p>
+          <button mat-raised-button color="primary" (click)="loadProfile()">
+            <mat-icon>refresh</mat-icon>
+            Retry
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

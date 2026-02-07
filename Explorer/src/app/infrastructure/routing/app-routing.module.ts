@@ -11,6 +11,7 @@ import { TourBrowsingComponent } from 'src/app/feature-modules/tour-browsing/tou
 import { ShoppingCartComponent } from 'src/app/feature-modules/tour-purchasing/shopping-cart/shopping-cart.component';
 import { PurchaseHistoryComponent } from 'src/app/feature-modules/tour-purchasing/purchase-history/purchase-history.component';
 import { TourDetailsComponent } from 'src/app/feature-modules/tour-details/tour-details/tour-details.component';
+import { TouristProfileComponent } from 'src/app/feature-modules/stakeholders/tourist-profile/tourist-profile.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path: 'cart', component: ShoppingCartComponent, canActivate: [AuthGuard]},
   {path: 'purchase-history', component: PurchaseHistoryComponent, canActivate: [AuthGuard]},
   {path: 'tour-details/:id', component: TourDetailsComponent, canActivate: [AuthGuard]},
+  {path: 'tourist-profile', component: TouristProfileComponent, canActivate: [AuthGuard]},
   {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 
