@@ -12,6 +12,7 @@ import { ShoppingCartComponent } from 'src/app/feature-modules/tour-purchasing/s
 import { PurchaseHistoryComponent } from 'src/app/feature-modules/tour-purchasing/purchase-history/purchase-history.component';
 import { TourDetailsComponent } from 'src/app/feature-modules/tour-details/tour-details/tour-details.component';
 import { TouristProfileComponent } from 'src/app/feature-modules/stakeholders/tourist-profile/tourist-profile.component';
+import { BlockedUsersComponent } from 'src/app/feature-modules/administration/blocked-users/blocked-users.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path: 'purchase-history', component: PurchaseHistoryComponent, canActivate: [AuthGuard]},
   {path: 'tour-details/:id', component: TourDetailsComponent, canActivate: [AuthGuard]},
   {path: 'tourist-profile', component: TouristProfileComponent, canActivate: [AuthGuard]},
+  {path: 'blocked-users', component: BlockedUsersComponent, canActivate: [AuthGuard]},
   {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 

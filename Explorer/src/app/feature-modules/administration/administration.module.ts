@@ -4,13 +4,14 @@ import { EquipmentFormComponent } from './equipment-form/equipment-form.componen
 import { EquipmentComponent } from './equipment/equipment.component';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { BlockedUsersComponent } from './blocked-users/blocked-users.component';
 
 
 @NgModule({
   declarations: [
     EquipmentFormComponent,
-    EquipmentComponent
+    EquipmentComponent,
+    BlockedUsersComponent
   ],
   imports: [
     CommonModule,

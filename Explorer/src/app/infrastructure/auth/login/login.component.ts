@@ -11,6 +11,8 @@ import { Login } from '../model/login.model';
 })
 export class LoginComponent {
 
+  errorMessage: string = '';
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -30,8 +32,24 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(login).subscribe({
         next: () => {
+          this.errorMessage = '';
           this.router.navigate(['/']);
         },
+        error: (error) => {
+          console.error('Login error:', error);
+          
+          // Handle different error statuses
+          if (error.status === 403) {
+            // User is blocked
+            this.errorMessage = 'Your account has been temporarily blocked due to multiple failed login attempts. Please contact an administrator.';
+          } else if (error.status === 404) {
+            // Invalid credentials (could be wrong username or password)
+            this.errorMessage = 'Invalid username or password. Please try again.';
+          } else {
+            // Generic error
+            this.errorMessage = 'An error occurred during login. Please try again later.';
+          }
+        }
       });
     }
   }
