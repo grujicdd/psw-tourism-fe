@@ -29,6 +29,12 @@
                 Manage Equipment
             </button>
             
+            <!-- NEW: Blocked Users button for administrators -->
+            <button *ngIf="user && user.role === 'administrator'" color="primary" mat-raised-button [routerLink]="['blocked-users']">
+                <mat-icon>block</mat-icon>
+                Blocked Users
+            </button>
+            
             <!-- Author/Guide buttons -->
 
             <button *ngIf="user && (user.role === 'tourist' || user.role === 'Tourist' || user.role.toLowerCase() === 'tourist')" 

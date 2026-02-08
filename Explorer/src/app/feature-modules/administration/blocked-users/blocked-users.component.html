@@ -1,0 +1,99 @@
+<div class="blocked-users-container">
+  <h2>Blocked Users Management</h2>
+
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="loading">
+    <mat-spinner></mat-spinner>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Success message -->
+  <mat-card *ngIf="successMessage" class="success-message">
+    <mat-icon>check_circle</mat-icon>
+    {{ successMessage }}
+  </mat-card>
+
+  <!-- Error message -->
+  <mat-card *ngIf="errorMessage" class="error-message">
+    <mat-icon>error</mat-icon>
+    {{ errorMessage }}
+  </mat-card>
+
+  <!-- Empty state -->
+  <mat-card *ngIf="!isLoading && blockedUsers.length === 0" class="empty-state">
+    <mat-icon>check_circle_outline</mat-icon>
+    <h3>No Blocked Users</h3>
+    <p>There are currently no blocked users in the system.</p>
+  </mat-card>
+
+  <!-- Blocked users table -->
+  <mat-card *ngIf="!isLoading && blockedUsers.length > 0" class="table-container">
+    <table mat-table [dataSource]="blockedUsers" class="blocked-users-table">
+
+      <!-- Username Column -->
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef>Username</th>
+        <td mat-cell *matCellDef="let user">{{ user.username }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>First Name</th>
+        <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+      </ng-container>
+
+      <!-- Surname Column -->
+      <ng-container matColumnDef="surname">
+        <th mat-header-cell *matHeaderCellDef>Last Name</th>
+        <td mat-cell *matCellDef="let user">{{ user.surname }}</td>
+      </ng-container>
+
+      <!-- Role Column -->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let user">
+          <mat-chip [color]="user.role === 'tourist' ? 'primary' : 'accent'">
+            {{ user.role }}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <!-- Block Count Column -->
+      <ng-container matColumnDef="blockCount">
+        <th mat-header-cell *matHeaderCellDef>Block Status</th>
+        <td mat-cell *matCellDef="let user">
+          <mat-chip [color]="user.blockCount >= 3 ? 'warn' : 'primary'">
+            {{ getBlockStatusText(user) }}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let user">
+          <button 
+            mat-raised-button 
+            color="primary"
+            [disabled]="!user.canBeUnblocked"
+            (click)="unblockUser(user)"
+            matTooltip="{{ user.canBeUnblocked ? 'Unblock user' : 'User has been blocked 3 times and cannot be unblocked' }}">
+            <mat-icon>lock_open</mat-icon>
+            Unblock
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card>
+
+  <!-- Refresh button -->
+  <div class="actions" *ngIf="!isLoading">
+    <button mat-raised-button color="accent" (click)="loadBlockedUsers()">
+      <mat-icon>refresh</mat-icon>
+      Refresh List
+    </button>
+  </div>
+</div>

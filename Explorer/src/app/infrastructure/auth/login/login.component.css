@@ -10,6 +10,18 @@ div {
     flex-direction: column;
 }
 
-p {
-    margin-top: 10px;
+/* Error message styling */
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.error-message mat-icon {
+    color: #dc3545;
 }
