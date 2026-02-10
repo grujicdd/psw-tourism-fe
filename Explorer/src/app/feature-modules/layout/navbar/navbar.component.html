@@ -29,14 +29,18 @@
                 Manage Equipment
             </button>
             
-            <!-- NEW: Blocked Users button for administrators -->
             <button *ngIf="user && user.role === 'administrator'" color="primary" mat-raised-button [routerLink]="['blocked-users']">
                 <mat-icon>block</mat-icon>
                 Blocked Users
             </button>
             
+            <!-- NEW: Tour Problems for Admin -->
+            <button *ngIf="user && user.role === 'administrator'" color="primary" mat-raised-button [routerLink]="['admin-tour-problems']">
+                <mat-icon>gavel</mat-icon>
+                Review Problems
+            </button>
+            
             <!-- Author/Guide buttons -->
-
             <button *ngIf="user && (user.role === 'tourist' || user.role === 'Tourist' || user.role.toLowerCase() === 'tourist')" 
                     color="primary" 
                     mat-raised-button 
@@ -48,6 +52,12 @@
             <button *ngIf="user && (user.role === 'author' || user.role === 'Author' || user.role.toLowerCase() === 'author')" color="primary" mat-raised-button [routerLink]="['tours']">
                 <mat-icon>tour</mat-icon>
                 Manage Tours
+            </button>
+            
+            <!-- NEW: Tour Problems for Guide -->
+            <button *ngIf="user && (user.role === 'author' || user.role === 'Author' || user.role.toLowerCase() === 'author')" color="primary" mat-raised-button [routerLink]="['tour-problems']">
+                <mat-icon>warning</mat-icon>
+                Tour Problems
             </button>
             
             <!-- Tourist buttons -->
@@ -66,6 +76,12 @@
                     color="primary" mat-raised-button [routerLink]="['purchase-history']">
                 <mat-icon>history</mat-icon>
                 Purchase History
+            </button>
+
+            <button *ngIf="user && (user.role === 'tourist' || user.role === 'Tourist')" 
+                    color="primary" mat-raised-button [routerLink]="['my-problems']">
+                <mat-icon>report_problem</mat-icon>
+                My Problems
             </button>
         </div>
     </div>

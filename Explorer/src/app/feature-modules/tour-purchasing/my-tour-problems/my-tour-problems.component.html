@@ -1,0 +1,72 @@
+<div class="my-problems-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>My Reported Problems</mat-card-title>
+      <button mat-raised-button color="primary" (click)="openReportDialog()">
+        <mat-icon>add</mat-icon>
+        Report New Problem
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filter Chips -->
+      <div class="filter-section">
+        <mat-chip-set>
+          <mat-chip (click)="onFilterChange('all')" [highlighted]="selectedFilter === 'all'">
+            All ({{ problems.length }})
+          </mat-chip>
+          <mat-chip (click)="onFilterChange('pending')" [highlighted]="selectedFilter === 'pending'">
+            Na čekanju ({{ getStatusCount(0) }})
+          </mat-chip>
+          <mat-chip (click)="onFilterChange('underReview')" [highlighted]="selectedFilter === 'underReview'">
+            Na reviziji ({{ getStatusCount(2) }})
+          </mat-chip>
+          <mat-chip (click)="onFilterChange('resolved')" [highlighted]="selectedFilter === 'resolved'">
+            Rešeno ({{ getStatusCount(1) }})
+          </mat-chip>
+          <mat-chip (click)="onFilterChange('rejected')" [highlighted]="selectedFilter === 'rejected'">
+            Odbačeno ({{ getStatusCount(3) }})
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && filteredProblems.length === 0 && selectedFilter === 'all'" class="empty-state">
+        <mat-icon>info</mat-icon>
+        <p>No problems reported yet</p>
+      </div>
+
+      <!-- Empty Filter State -->
+      <div *ngIf="!loading && filteredProblems.length === 0 && selectedFilter !== 'all'" class="empty-state">
+        <mat-icon>info</mat-icon>
+        <p>No problems with this status</p>
+      </div>
+
+      <!-- Problems List -->
+      <div *ngIf="!loading && filteredProblems.length > 0" class="problems-list">
+        <mat-card *ngFor="let problem of filteredProblems" class="problem-card">
+          <mat-card-header>
+            <mat-card-title>{{ problem.title }}</mat-card-title>
+            <mat-chip [color]="getStatusColor(problem.status)" selected>
+              {{ getStatusText(problem.statusName) }}
+            </mat-chip>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p><strong>Tour:</strong> {{ problem.tourName }}</p>
+            <p><strong>Description:</strong> {{ problem.description }}</p>
+            <p><strong>Reported:</strong> {{ problem.reportedAt | date:'medium' }}</p>
+            <p *ngIf="problem.resolvedAt"><strong>Resolved:</strong> {{ problem.resolvedAt | date:'medium' }}</p>
+            <p *ngIf="problem.reviewRequestedAt"><strong>Under Review Since:</strong> {{ problem.reviewRequestedAt | date:'medium' }}</p>
+            <p *ngIf="problem.rejectedAt"><strong>Rejected:</strong> {{ problem.rejectedAt | date:'medium' }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

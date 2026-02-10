@@ -416,3 +416,12 @@
     padding-left: 8px;
   }
 }
+
+.report-problem-button {
+  margin-top: 8px;
+}
+
+.tour-review-section button {
+  width: 100%;
+  margin-bottom: 8px;
+}

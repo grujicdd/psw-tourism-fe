@@ -100,6 +100,16 @@
                       {{ getReviewButtonText(tourData) }}
                     </button>
 
+                    <!-- Report Problem Button - NEW -->
+                    <button 
+                      mat-stroked-button 
+                      color="warn"
+                      (click)="openReportProblemDialog(tourData)"
+                      class="report-problem-button">
+                      <mat-icon>report_problem</mat-icon>
+                      Report Problem
+                    </button>
+
                     <!-- Status Message -->
                     <div class="review-status-message" *ngIf="!tourData.canReview && !tourData.review">
                       <mat-icon class="info-icon">info</mat-icon>

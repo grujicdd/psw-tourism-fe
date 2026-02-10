@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Report Problem</h2>
+
+<mat-dialog-content>
+  <p class="tour-name"><strong>Tour:</strong> {{ data.tourName }}</p>
+  
+  <form [formGroup]="problemForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Problem Title</mat-label>
+      <input matInput formControlName="title" placeholder="Brief description">
+      <mat-error *ngIf="problemForm.get('title')?.hasError('required')">
+        Title is required
+      </mat-error>
+      <mat-error *ngIf="problemForm.get('title')?.hasError('minlength')">
+        Title must be at least 3 characters
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="5" 
+                placeholder="Detailed description of the problem"></textarea>
+      <mat-error *ngIf="problemForm.get('description')?.hasError('required')">
+        Description is required
+      </mat-error>
+      <mat-error *ngIf="problemForm.get('description')?.hasError('minlength')">
+        Description must be at least 10 characters
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="loading">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="loading || problemForm.invalid">
+    <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+    <mat-icon *ngIf="!loading">send</mat-icon>
+    {{ loading ? 'Submitting...' : 'Submit Problem' }}
+  </button>
+</mat-dialog-actions>
