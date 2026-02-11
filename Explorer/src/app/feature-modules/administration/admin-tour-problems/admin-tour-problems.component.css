@@ -1,0 +1,97 @@
+.admin-problems-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+mat-card {
+  margin-bottom: 20px;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+mat-card-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #d32f2f;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  color: #4caf50;
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #4caf50;
+}
+
+.empty-state p {
+  font-size: 18px;
+  margin-top: 16px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.problems-table {
+  width: 100%;
+  background: white;
+}
+
+.problems-table th {
+  background: #ffebee;
+  font-weight: 600;
+  color: #d32f2f;
+}
+
+.problems-table td {
+  padding: 16px 8px;
+}
+
+.description-cell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  min-width: 140px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .problems-table {
+    font-size: 12px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
+}

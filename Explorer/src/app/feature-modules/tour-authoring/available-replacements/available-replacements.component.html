@@ -1,0 +1,103 @@
+<!-- src/app/feature-modules/tour-authoring/available-replacements/available-replacements.component.html -->
+<div class="available-replacements-container">
+  <h2>Available Tour Replacements</h2>
+  <p class="subtitle">Help out other guides by taking over their tours</p>
+
+  <!-- Success/Error Messages -->
+  <mat-card *ngIf="successMessage" class="message-card success-message">
+    <mat-icon>check_circle</mat-icon>
+    {{ successMessage }}
+  </mat-card>
+
+  <mat-card *ngIf="errorMessage" class="message-card error-message">
+    <mat-icon>error</mat-icon>
+    {{ errorMessage }}
+  </mat-card>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading available replacements...</p>
+  </div>
+
+  <!-- No Available Replacements -->
+  <mat-card *ngIf="!isLoading && availableReplacements.length === 0" class="empty-state">
+    <mat-icon>event_available</mat-icon>
+    <h3>No Replacements Available</h3>
+    <p>There are currently no tours seeking replacement guides.</p>
+    <p class="info-text">Tours that conflict with your existing schedule are automatically filtered out.</p>
+  </mat-card>
+
+  <!-- Available Replacements List -->
+  <div *ngIf="!isLoading && availableReplacements.length > 0" class="replacements-grid">
+    <mat-card *ngFor="let replacement of availableReplacements" class="replacement-card">
+      <mat-card-header>
+        <mat-card-title>{{ replacement.tourName }}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-chip color="accent" selected>
+            {{ getCategoryName(replacement.tourCategory) }}
+          </mat-chip>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="tour-description">{{ replacement.tourDescription }}</p>
+
+        <div class="tour-details">
+          <div class="detail-item">
+            <mat-icon>calendar_today</mat-icon>
+            <div class="detail-content">
+              <span class="detail-label">Date</span>
+              <span class="detail-value">{{ replacement.tourDate | date:'full' }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <mat-icon>attach_money</mat-icon>
+            <div class="detail-content">
+              <span class="detail-label">Price</span>
+              <span class="detail-value">€{{ replacement.tourPrice }}</span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <mat-icon>terrain</mat-icon>
+            <div class="detail-content">
+              <span class="detail-label">Difficulty</span>
+              <span class="detail-value">
+                <mat-chip [color]="getDifficultyColor(replacement.tourDifficulty)" selected size="small">
+                  {{ getDifficultyName(replacement.tourDifficulty) }}
+                </mat-chip>
+              </span>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <mat-icon>schedule</mat-icon>
+            <div class="detail-content">
+              <span class="detail-label">Requested</span>
+              <span class="detail-value">{{ replacement.requestedAt | date:'short' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <div class="help-message">
+          <mat-icon>info</mat-icon>
+          <span>By accepting, you'll become the guide for this tour</span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="acceptReplacement(replacement)">
+          <mat-icon>check_circle</mat-icon>
+          Accept Replacement
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

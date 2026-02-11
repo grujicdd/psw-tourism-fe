@@ -1,0 +1,99 @@
+<!-- src/app/feature-modules/tour-authoring/tour-replacement-management/tour-replacement-management.component.html -->
+<div class="replacement-management-container">
+  <h2>My Replacement Requests</h2>
+
+  <!-- Success/Error Messages -->
+  <mat-card *ngIf="successMessage" class="message-card success-message">
+    <mat-icon>check_circle</mat-icon>
+    {{ successMessage }}
+  </mat-card>
+
+  <mat-card *ngIf="errorMessage" class="message-card error-message">
+    <mat-icon>error</mat-icon>
+    {{ errorMessage }}
+  </mat-card>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading replacement requests...</p>
+  </div>
+
+  <!-- No Replacements -->
+  <mat-card *ngIf="!isLoading && myReplacements.length === 0" class="empty-state">
+    <mat-icon>event_busy</mat-icon>
+    <h3>No Replacement Requests</h3>
+    <p>You haven't requested any tour replacements yet.</p>
+  </mat-card>
+
+  <!-- Replacements List -->
+  <div *ngIf="!isLoading && myReplacements.length > 0" class="replacements-list">
+    <mat-card *ngFor="let replacement of myReplacements" class="replacement-card">
+      <mat-card-header>
+        <mat-card-title>
+          {{ getTour(replacement.tourId)?.name || 'Loading...' }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          <mat-chip [color]="getStatusColor(replacement.status)" selected>
+            {{ getStatusDisplayName(replacement.status) }}
+          </mat-chip>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="replacement-details" *ngIf="getTour(replacement.tourId) as tour">
+          <div class="detail-row">
+            <mat-icon>calendar_today</mat-icon>
+            <span>{{ tour.date | date:'medium' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <mat-icon>attach_money</mat-icon>
+            <span>€{{ tour.price }}</span>
+          </div>
+
+          <div class="detail-row">
+            <mat-icon>terrain</mat-icon>
+            <span>Difficulty: {{ tour.difficulty }}</span>
+          </div>
+
+          <div class="detail-row">
+            <mat-icon>schedule</mat-icon>
+            <span>Requested: {{ replacement.requestedAt | date:'short' }}</span>
+          </div>
+
+          <div class="detail-row" *ngIf="replacement.status === TourReplacementStatus.ACCEPTED && replacement.acceptedAt">
+            <mat-icon>check</mat-icon>
+            <span>Accepted: {{ replacement.acceptedAt | date:'short' }}</span>
+          </div>
+
+          <div class="detail-row" *ngIf="replacement.status === TourReplacementStatus.CANCELLED && replacement.cancelledAt">
+            <mat-icon>cancel</mat-icon>
+            <span>Cancelled: {{ replacement.cancelledAt | date:'short' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button 
+          mat-raised-button 
+          color="warn" 
+          *ngIf="canCancel(replacement)"
+          (click)="cancelReplacement(replacement)">
+          <mat-icon>cancel</mat-icon>
+          Cancel Request
+        </button>
+
+        <span class="status-info" *ngIf="replacement.status === TourReplacementStatus.ACCEPTED">
+          <mat-icon>info</mat-icon>
+          Replacement found! Another guide will conduct this tour.
+        </span>
+
+        <span class="status-info" *ngIf="replacement.status === TourReplacementStatus.EXPIRED">
+          <mat-icon>warning</mat-icon>
+          No replacement found. Tour was cancelled and tourists refunded.
+        </span>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

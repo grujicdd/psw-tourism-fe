@@ -8,6 +8,7 @@ import { TourReviewService, TourReview } from '../tour-review.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TourReviewDialogComponent } from '../tour-review-dialog/tour-review-dialog.component';
 import { forkJoin, map, switchMap } from 'rxjs';
+import { ReportProblemDialogComponent } from '../report-problem-dialog/report-problem-dialog.component';
 
 interface TourWithReview {
   tour: Tour;
@@ -110,6 +111,23 @@ export class PurchaseHistoryComponent implements OnInit {
       error: (error) => {
         console.error('Error loading purchases:', error);
         this.loading = false;
+      }
+    });
+  }
+
+  openReportProblemDialog(tourData: any): void {
+    const dialogRef = this.dialog.open(ReportProblemDialogComponent, {
+      width: '500px',
+      data: {
+        tourId: tourData.tour.id,
+        tourName: tourData.tour.name
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Problem was reported successfully
+        console.log('Problem reported for tour:', tourData.tour.name);
       }
     });
   }

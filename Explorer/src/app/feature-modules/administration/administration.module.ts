@@ -5,13 +5,14 @@ import { EquipmentComponent } from './equipment/equipment.component';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BlockedUsersComponent } from './blocked-users/blocked-users.component';
-
+import { AdminTourProblemsComponent } from './admin-tour-problems/admin-tour-problems.component';
 
 @NgModule({
   declarations: [
     EquipmentFormComponent,
     EquipmentComponent,
-    BlockedUsersComponent
+    BlockedUsersComponent,
+    AdminTourProblemsComponent
   ],
   imports: [
     CommonModule,
