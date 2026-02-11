@@ -169,6 +169,13 @@
             Publish
           </button>
           
+          <button mat-button color="accent" (click)="requestReplacement(tour)" 
+                  *ngIf="tour.state === 1 && isFutureTour(tour)"
+                  matTooltip="Request another guide to take over this tour">
+            <mat-icon>find_replace</mat-icon>
+            Request Replacement
+          </button>
+
           <button mat-button color="warn" (click)="deleteTour(tour.id)">
             <mat-icon>delete</mat-icon>
             Delete

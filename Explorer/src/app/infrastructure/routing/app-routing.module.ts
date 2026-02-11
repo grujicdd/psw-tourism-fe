@@ -13,9 +13,9 @@ import { PurchaseHistoryComponent } from 'src/app/feature-modules/tour-purchasin
 import { TourDetailsComponent } from 'src/app/feature-modules/tour-details/tour-details/tour-details.component';
 import { TouristProfileComponent } from 'src/app/feature-modules/stakeholders/tourist-profile/tourist-profile.component';
 import { BlockedUsersComponent } from 'src/app/feature-modules/administration/blocked-users/blocked-users.component';
-import { MyTourProblemsComponent } from 'src/app/feature-modules/tour-purchasing/my-tour-problems/my-tour-problems.component';
-import { GuideTourProblemsComponent } from 'src/app/feature-modules/tour-authoring/guide-tour-problems/guide-tour-problems.component';
-import { AdminTourProblemsComponent } from 'src/app/feature-modules/administration/admin-tour-problems/admin-tour-problems.component';
+import { TourReplacementManagementComponent } from 'src/app/feature-modules/tour-authoring/tour-replacement-management/tour-replacement-management.component';
+import { AvailableReplacementsComponent } from 'src/app/feature-modules/tour-authoring/available-replacements/available-replacements.component';
+
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -29,9 +29,8 @@ const routes: Routes = [
   {path: 'tour-details/:id', component: TourDetailsComponent, canActivate: [AuthGuard]},
   {path: 'tourist-profile', component: TouristProfileComponent, canActivate: [AuthGuard]},
   {path: 'blocked-users', component: BlockedUsersComponent, canActivate: [AuthGuard]},
-  {path: 'my-problems', component: MyTourProblemsComponent, canActivate: [AuthGuard]},  // Tourist
-  {path: 'tour-problems', component: GuideTourProblemsComponent, canActivate: [AuthGuard]},  // Guide
-  {path: 'admin-tour-problems', component: AdminTourProblemsComponent, canActivate: [AuthGuard]},  // Admin
+  {path: 'my-replacement-requests', component: TourReplacementManagementComponent, canActivate: [AuthGuard]},
+  {path: 'available-replacements', component: AvailableReplacementsComponent, canActivate: [AuthGuard]},
   {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 

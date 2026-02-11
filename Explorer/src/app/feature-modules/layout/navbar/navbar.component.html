@@ -34,7 +34,7 @@
                 Blocked Users
             </button>
             
-            <!-- NEW: Tour Problems for Admin -->
+
             <button *ngIf="user && user.role === 'administrator'" color="primary" mat-raised-button [routerLink]="['admin-tour-problems']">
                 <mat-icon>gavel</mat-icon>
                 Review Problems
@@ -54,10 +54,27 @@
                 Manage Tours
             </button>
             
-            <!-- NEW: Tour Problems for Guide -->
+
             <button *ngIf="user && (user.role === 'author' || user.role === 'Author' || user.role.toLowerCase() === 'author')" color="primary" mat-raised-button [routerLink]="['tour-problems']">
                 <mat-icon>warning</mat-icon>
                 Tour Problems
+            </button>
+
+
+            <button *ngIf="user && (user.role === 'author' || user.role === 'Author' || user.role.toLowerCase() === 'author')" 
+                    color="primary" 
+                    mat-raised-button 
+                    [routerLink]="['my-replacement-requests']">
+                <mat-icon>swap_horiz</mat-icon>
+                My Replacements
+            </button>
+
+            <button *ngIf="user && (user.role === 'author' || user.role === 'Author' || user.role.toLowerCase() === 'author')" 
+                    color="primary" 
+                    mat-raised-button 
+                    [routerLink]="['available-replacements']">
+                <mat-icon>event_available</mat-icon>
+                Find Replacements
             </button>
             
             <!-- Tourist buttons -->

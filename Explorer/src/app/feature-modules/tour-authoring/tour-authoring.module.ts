@@ -21,13 +21,17 @@ import { TourManagementComponent } from './tour-management/tour-management.compo
 import { KeyPointManagementComponent } from './keypoint-management/keypoint-management.component';
 import { MapComponent } from './map/map.component';
 import { GuideTourProblemsComponent } from './guide-tour-problems/guide-tour-problems.component';
+import { TourReplacementManagementComponent } from './tour-replacement-management/tour-replacement-management.component';
+import { AvailableReplacementsComponent } from './available-replacements/available-replacements.component';
 
 @NgModule({
   declarations: [
     TourManagementComponent,
     KeyPointManagementComponent,
     MapComponent,
-    GuideTourProblemsComponent
+    GuideTourProblemsComponent,
+    TourReplacementManagementComponent,
+    AvailableReplacementsComponent
   ],
   imports: [
     CommonModule,

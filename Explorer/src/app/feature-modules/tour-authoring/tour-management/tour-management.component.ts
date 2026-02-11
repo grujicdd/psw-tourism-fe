@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TourService } from '../tour.service';
 import { Router } from '@angular/router';
 import { Tour, TourState } from '../model/tour.model';
+import { TourReplacementService } from '../tour-replacement.service';
 
 @Component({
   selector: 'xp-tour-management',
@@ -46,7 +47,8 @@ export class TourManagementComponent implements OnInit {
 
   constructor(
     private tourService: TourService,
-    private router: Router
+    private router: Router,
+    private replacementService: TourReplacementService
   ) {}
 
   ngOnInit(): void {
@@ -188,6 +190,39 @@ export class TourManagementComponent implements OnInit {
         }
       });
     }
+  }
+
+  requestReplacement(tour: Tour): void {
+    if (!this.isFutureTour(tour)) {
+      alert('Cannot request replacement for past tours.');
+      return;
+    }
+
+    if (tour.state !== TourState.COMPLETE) {
+      alert('Only published tours can request replacement.');
+      return;
+    }
+
+    if (!confirm(`Request a replacement guide for "${tour.name}"?\n\nOther guides will be able to see and accept this tour.`)) {
+      return;
+    }
+
+    this.replacementService.requestReplacement(tour.id).subscribe({
+      next: (replacement) => {
+        alert('Replacement requested successfully! Other guides can now see this tour in "Find Replacements".');
+        // Optionally navigate to replacement requests page
+        // this.router.navigate(['/my-replacement-requests']);
+      },
+      error: (error) => {
+        const errorMessage = error.error || 'Failed to request replacement. Please try again.';
+        alert('Error: ' + errorMessage);
+        console.error('Error requesting replacement:', error);
+      }
+    });
+  }
+
+  isFutureTour(tour: Tour): boolean {
+    return new Date(tour.date) > new Date();
   }
 
   manageKeyPoints(tour: Tour): void {
