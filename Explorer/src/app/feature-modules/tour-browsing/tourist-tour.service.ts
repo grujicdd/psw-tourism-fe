@@ -15,6 +15,7 @@ export interface TourFilter {
   category?: number;
   difficulty?: number;
   maxPrice?: number;
+  sortByDate?: string;  // ADDED
 }
 
 export interface KeyPoint {
@@ -36,8 +37,15 @@ export class TouristTourService {
 
   constructor(private http: HttpClient) {}
 
-  getPublishedTours(page: number, pageSize: number): Observable<PagedResult<Tour>> {
-    return this.http.get<PagedResult<Tour>>(`${this.apiUrl}?page=${page}&pageSize=${pageSize}`);
+  getPublishedTours(page: number, pageSize: number, sortByDate?: string): Observable<PagedResult<Tour>> {
+    let params = `page=${page}&pageSize=${pageSize}`;
+    
+    // ADDED: Include sortByDate if provided
+    if (sortByDate) {
+      params += `&sortByDate=${sortByDate}`;
+    }
+
+    return this.http.get<PagedResult<Tour>>(`${this.apiUrl}?${params}`);
   }
 
   getTour(id: number): Observable<Tour> {
@@ -56,6 +64,10 @@ export class TouristTourService {
     if (filter.maxPrice && filter.maxPrice > 0) {
       params += `&maxPrice=${filter.maxPrice}`;
     }
+    // ADDED: Include sortByDate if provided
+    if (filter.sortByDate) {
+      params += `&sortByDate=${filter.sortByDate}`;
+    }
 
     console.log('API request params:', params); // Debug log
 
@@ -66,7 +78,6 @@ export class TouristTourService {
     return this.http.get<Category[]>(`${this.apiUrl}/categories`);
   }
 
-  // Add this new method for keypoints
   getTourKeyPoints(tourId: number): Observable<KeyPoint[]> {
     return this.http.get<KeyPoint[]>(`${this.apiUrl}/${tourId}/keypoints`);
   }
