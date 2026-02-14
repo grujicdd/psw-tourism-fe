@@ -18,6 +18,7 @@ export class TourManagementComponent implements OnInit {
   editingTour: Tour | null = null;
   selectedTour: Tour | null = null;
   showKeyPointManagement = false;
+  selectedSortOrder: string = '';
 
   // Category options (matching the interests from registration)
   categories = [
@@ -34,6 +35,12 @@ export class TourManagementComponent implements OnInit {
     { id: 2, name: 'Moderate' },
     { id: 3, name: 'Hard' },
     { id: 4, name: 'Expert' }
+  ];
+
+  sortOptions = [
+    { value: '', label: 'Default' },
+    { value: 'asc', label: 'Date: Earliest First' },
+    { value: 'desc', label: 'Date: Latest First' }
   ];
 
   tourForm = new FormGroup({
@@ -64,6 +71,26 @@ export class TourManagementComponent implements OnInit {
         console.error('Error loading tours:', error);
       }
     });
+  }
+
+  applySorting(tours: Tour[]): Tour[] {
+    if (!this.selectedSortOrder) {
+      return tours; // No sorting
+    }
+
+    const sortedTours = [...tours]; // Create a copy to avoid mutating original
+    
+    if (this.selectedSortOrder === 'asc') {
+      return sortedTours.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    } else if (this.selectedSortOrder === 'desc') {
+      return sortedTours.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
+    return sortedTours;
+  }
+
+  onSortChange(): void {
+    this.tours = this.applySorting(this.tours);
   }
 
   showCreateTourForm(): void {
