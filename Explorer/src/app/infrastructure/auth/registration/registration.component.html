@@ -34,8 +34,21 @@
       </mat-checkbox>
     </div>
 
+    <!-- ADDED: Email Notifications Toggle -->
+    <div class="notification-section">
+      <label>Email Notifications</label>
+      <mat-slide-toggle
+        formControlName="receiveRecommendations"
+        color="primary">
+        <div class="toggle-content">
+          <span class="toggle-label">Receive tour recommendations</span>
+          <span class="toggle-description">
+            Get notified when new tours matching your interests are published
+          </span>
+        </div>
+      </mat-slide-toggle>
+    </div>
+
     <button color="primary" type="submit" mat-raised-button>Register</button>
   </div>
 </form>
-
-

@@ -15,6 +15,9 @@ import { TouristProfileComponent } from 'src/app/feature-modules/stakeholders/to
 import { BlockedUsersComponent } from 'src/app/feature-modules/administration/blocked-users/blocked-users.component';
 import { TourReplacementManagementComponent } from 'src/app/feature-modules/tour-authoring/tour-replacement-management/tour-replacement-management.component';
 import { AvailableReplacementsComponent } from 'src/app/feature-modules/tour-authoring/available-replacements/available-replacements.component';
+import { MyTourProblemsComponent } from 'src/app/feature-modules/tour-purchasing/my-tour-problems/my-tour-problems.component';
+import { GuideTourProblemsComponent } from 'src/app/feature-modules/tour-authoring/guide-tour-problems/guide-tour-problems.component';
+import { AdminTourProblemsComponent } from 'src/app/feature-modules/administration/admin-tour-problems/admin-tour-problems.component';
 
 
 const routes: Routes = [
@@ -31,6 +34,9 @@ const routes: Routes = [
   {path: 'blocked-users', component: BlockedUsersComponent, canActivate: [AuthGuard]},
   {path: 'my-replacement-requests', component: TourReplacementManagementComponent, canActivate: [AuthGuard]},
   {path: 'available-replacements', component: AvailableReplacementsComponent, canActivate: [AuthGuard]},
+  {path: 'my-problems', component: MyTourProblemsComponent, canActivate: [AuthGuard]},
+  {path: 'tour-problems', component: GuideTourProblemsComponent, canActivate: [AuthGuard]},
+  {path: 'admin-tour-problems', component: AdminTourProblemsComponent, canActivate: [AuthGuard]},
   {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
 

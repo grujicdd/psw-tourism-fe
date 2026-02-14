@@ -9,3 +9,37 @@ div {
     display:flex;
     flex-direction: column;
 }
+
+.notification-section {
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.notification-section > label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.notification-section mat-slide-toggle {
+  display: block;
+  margin-left: 8px;
+}
+
+.toggle-content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+}
+
+.toggle-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.toggle-description {
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 1.4;
+}

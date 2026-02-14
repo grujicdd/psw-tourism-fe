@@ -20,7 +20,7 @@
       <mat-card-header>
         <mat-card-title>
           <mat-icon>tune</mat-icon>
-          Filters
+          Filters & Sorting
         </mat-card-title>
       </mat-card-header>
       
@@ -51,6 +51,16 @@
               <mat-label>Max Price (€)</mat-label>
               <input matInput type="number" formControlName="maxPrice" min="0" step="0.01"
                      (input)="onMaxPriceChange()" placeholder="Enter max price">
+            </mat-form-field>
+
+            <!-- ADDED: Sort by date dropdown -->
+            <mat-form-field appearance="outline">
+              <mat-label>Sort by Date</mat-label>
+              <mat-select formControlName="sortByDate" (selectionChange)="onFilterChange()">
+                <mat-option *ngFor="let option of sortOptions" [value]="option.value">
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
 
             <button mat-stroked-button (click)="clearFilters()" class="clear-filters-btn">

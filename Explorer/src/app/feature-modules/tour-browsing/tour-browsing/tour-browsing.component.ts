@@ -21,7 +21,8 @@ export class TourBrowsingComponent implements OnInit {
   pageSize = 12;
   totalCount = 0;
   hasNextPage = false;
-  addingToCart: Set<number> = new Set(); // Track which tours are being added
+  addingToCart: Set<number> = new Set();
+  private priceFilterTimeout: any;
 
   // Difficulty levels
   difficulties = [
@@ -31,10 +32,18 @@ export class TourBrowsingComponent implements OnInit {
     { id: 4, name: 'Expert' }
   ];
 
+  // ADDED: Sort options
+  sortOptions = [
+    { value: '', label: 'Default' },
+    { value: 'asc', label: 'Date: Earliest First' },
+    { value: 'desc', label: 'Date: Latest First' }
+  ];
+
   filterForm = new FormGroup({
     category: new FormControl<number | null>(null),
     difficulty: new FormControl<number | null>(null),
-    maxPrice: new FormControl<number | null>(null)
+    maxPrice: new FormControl<number | null>(null),
+    sortByDate: new FormControl<string>('')  // ADDED: Sort control
   });
 
   constructor(
@@ -68,17 +77,18 @@ export class TourBrowsingComponent implements OnInit {
       category: filterValues.category || undefined,
       difficulty: filterValues.difficulty || undefined,
       maxPrice: filterValues.maxPrice && filterValues.maxPrice > 0 ? 
-        Number(filterValues.maxPrice) : undefined
+        Number(filterValues.maxPrice) : undefined,
+      sortByDate: filterValues.sortByDate || undefined  // ADDED
     };
 
-    // Check if any filter is applied
-    const hasFilters = filter.category || filter.difficulty || filter.maxPrice;
+    // Check if any filter is applied (including sort)
+    const hasFilters = filter.category || filter.difficulty || filter.maxPrice || filter.sortByDate;
 
-    console.log('Applied filters:', filter); // Debug log
+    console.log('Applied filters:', filter);
 
     const tourObservable = hasFilters 
       ? this.touristTourService.getFilteredTours(this.currentPage, this.pageSize, filter)
-      : this.touristTourService.getPublishedTours(this.currentPage, this.pageSize);
+      : this.touristTourService.getPublishedTours(this.currentPage, this.pageSize, filter.sortByDate);
 
     tourObservable.subscribe({
       next: (result) => {
@@ -105,14 +115,11 @@ export class TourBrowsingComponent implements OnInit {
   }
 
   onMaxPriceChange(): void {
-    // Add a small delay to prevent too many API calls while typing
     clearTimeout(this.priceFilterTimeout);
     this.priceFilterTimeout = setTimeout(() => {
       this.onFilterChange();
     }, 500);
   }
-
-  private priceFilterTimeout: any;
 
   clearFilters(): void {
     this.filterForm.reset();
@@ -137,65 +144,51 @@ export class TourBrowsingComponent implements OnInit {
   }
 
   getDifficultyColor(difficultyId: number): string {
-    switch (difficultyId) {
-      case 1: return '#4caf50'; // Easy - Green
-      case 2: return '#ff9800'; // Moderate - Orange  
-      case 3: return '#ff5722'; // Hard - Red-Orange
-      case 4: return '#f44336'; // Expert - Red
-      default: return '#666';
-    }
+    const colors: { [key: number]: string } = {
+      1: '#4caf50',
+      2: '#ff9800', 
+      3: '#f44336',
+      4: '#9c27b0'
+    };
+    return colors[difficultyId] || '#757575';
   }
 
   formatPrice(price: number): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'EUR'
-    }).format(price);
+    return `€${price.toFixed(2)}`;
   }
 
   onTourSelect(tour: Tour): void {
-    // Navigate to tour details page
-    console.log('Navigating to tour details for tour ID:', tour.id); // Debug log
-    this.router.navigate(['/tour-details', tour.id]).then(
-      (success) => console.log('Navigation success:', success),
-      (error) => console.error('Navigation error:', error)
-    );
+    this.router.navigate(['/tour-details', tour.id]);
   }
 
   addTourToCart(tour: Tour, event: Event): void {
-    event.stopPropagation(); // Prevent tour selection when clicking add to cart
+    event.stopPropagation();
     
-    if (this.addingToCart.has(tour.id)) {
-      return; // Already adding this tour
+    if (this.isAddingToCart(tour.id)) {
+      return;
     }
 
     this.addingToCart.add(tour.id);
-    
+
     this.cartService.addTourToCart(tour.id).subscribe({
-      next: (cart) => {
-        this.addingToCart.delete(tour.id);
-        this.snackBar.open(`"${tour.name}" added to cart!`, 'View Cart', { 
-          duration: 4000 
-        }).onAction().subscribe(() => {
-          this.router.navigate(['/cart']);
+      next: () => {
+        this.snackBar.open(`${tour.name} added to cart!`, 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['success-snackbar']
         });
+        this.addingToCart.delete(tour.id);
       },
       error: (error) => {
-        this.addingToCart.delete(tour.id);
         console.error('Error adding tour to cart:', error);
-        
-        // Show user-friendly error message
-        let errorMessage = 'Failed to add tour to cart';
-        if (error.error?.detail) {
-          // Extract meaningful error from API response
-          if (error.error.detail.includes('past tours')) {
-            errorMessage = 'Cannot add tours from the past to cart';
-          } else if (error.error.detail.includes('not published')) {
-            errorMessage = 'This tour is not available for booking';
-          }
-        }
-        
-        this.snackBar.open(errorMessage, 'Close', { duration: 4000 });
+        this.snackBar.open(error.error || 'Failed to add tour to cart', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['error-snackbar']
+        });
+        this.addingToCart.delete(tour.id);
       }
     });
   }
