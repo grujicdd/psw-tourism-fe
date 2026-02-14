@@ -1,7 +1,7 @@
 // src/app/feature-modules/tour-authoring/tour-authoring.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../infrastructure/material/material.module';
 
 // Import missing Material modules explicitly
@@ -47,7 +47,8 @@ import { AvailableReplacementsComponent } from './available-replacements/availab
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FormsModule
   ],
   exports: [
     TourManagementComponent

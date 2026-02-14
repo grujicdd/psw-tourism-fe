@@ -111,8 +111,23 @@
 
   <!-- Tours List -->
   <div class="tours-list-container">
+    <div class="tours-header">
     <h2>Your Tours</h2>
     
+    <!-- ADD THIS SORT DROPDOWN -->
+    <div class="sort-controls" *ngIf="tours.length > 0">
+      <mat-form-field appearance="outline" class="sort-field">
+        <mat-label>Sort by Date</mat-label>
+        <mat-select [(ngModel)]="selectedSortOrder" (selectionChange)="onSortChange()">
+          <mat-option *ngFor="let option of sortOptions" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+
     <div *ngIf="tours.length === 0" class="no-tours">
       <mat-icon>tour</mat-icon>
       <p>No tours created yet. Create your first tour to get started!</p>

@@ -296,3 +296,48 @@
 .mat-form-field.ng-invalid .mat-form-field-label {
   color: #f44336 !important;
 }
+
+/* Add this to your existing CSS */
+
+.tours-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.tours-header h2 {
+  margin: 0;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-field {
+  min-width: 220px;
+  margin: 0;
+}
+
+.sort-field ::ng-deep .mat-mdc-text-field-wrapper {
+  padding: 0 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tours-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .sort-controls {
+    width: 100%;
+  }
+
+  .sort-field {
+    width: 100%;
+  }
+}
